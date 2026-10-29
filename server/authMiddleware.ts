@@ -53,7 +53,7 @@ function sendJson(res: ServerResponse, statusCode: number, data: unknown) {
 }
 
 export function createAuthMiddleware(env: Record<string, string | undefined>) {
-  const validUsername = env.SCRAPBOOK_USERNAME || process.env.SCRAPBOOK_USERNAME || 'SouPra001';
+  const validUsername = env.SCRAPBOOK_USERNAME || process.env.SCRAPBOOK_USERNAME || 'SouPra1';
   const validPassword = env.SCRAPBOOK_PASSWORD || process.env.SCRAPBOOK_PASSWORD || '311525';
 
   return (req: IncomingMessage, res: ServerResponse, next: () => void) => {
