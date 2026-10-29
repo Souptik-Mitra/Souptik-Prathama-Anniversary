@@ -2,15 +2,23 @@ import http from 'http';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import dotenv from 'dotenv';
-import { createAuthMiddleware } from './authMiddleware.ts';
+import { createAuthMiddleware } from './authMiddleware.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 
-// Load environment variables from .env
-dotenv.config({ path: path.join(rootDir, '.env') });
+// Load local environment variables without requiring a runtime dependency.
+// Deployment providers supply these through their environment settings instead.
+const envFile = path.join(rootDir, '.env');
+if (fs.existsSync(envFile)) {
+  for (const line of fs.readFileSync(envFile, 'utf8').split(/\r?\n/)) {
+    const match = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)\s*$/);
+    if (!match || process.env[match[1]] !== undefined) continue;
+    const value = match[2].replace(/^(['"])(.*)\1$/, '$2');
+    process.env[match[1]] = value;
+  }
+}
 
 const port = process.env.PORT || 5173;
 const distDir = path.join(rootDir, 'dist');
