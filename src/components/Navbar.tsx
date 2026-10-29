@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
-import { Heart, Music, VolumeX, ImagePlus, Menu, X, BookOpen, LogOut } from 'lucide-react';
+import { Heart, Music, VolumeX, ImagePlus, Menu, X, BookOpen } from 'lucide-react';
 import { ambientMusicPlayer } from '../utils/ambientAudio';
 
 interface NavbarProps {
   onOpenUpload: () => void;
   onOpenChecklist: () => void;
-  onLogout: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   onOpenUpload,
   onOpenChecklist,
-  onLogout,
 }) => {
   const [isPlayingMusic, setIsPlayingMusic] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -170,18 +168,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span className="upload-btn-text">Add Memory</span>
           </button>
 
-          {/* Logout Button */}
-          <button
-            onClick={onLogout}
-            title="Sign out"
-            aria-label="Sign out"
-            className="btn-scrapbook-secondary"
-            style={{ padding: '8px 14px', fontSize: '0.85rem' }}
-          >
-            <LogOut size={15} />
-            <span className="logout-btn-text">Sign Out</span>
-          </button>
-
           {/* Mobile Menu Toggle Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -240,17 +226,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               <BookOpen size={16} />
               Personalize
             </button>
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onLogout();
-              }}
-              className="btn-scrapbook-secondary"
-              style={{ width: '100%', fontSize: '0.88rem', color: '#9E1C1C' }}
-            >
-              <LogOut size={16} />
-              Sign Out
-            </button>
           </div>
         </div>
       )}
@@ -263,7 +238,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           .mobile-menu-btn {
             display: block !important;
           }
-          .upload-btn-text, .logout-btn-text {
+          .upload-btn-text {
             display: none;
           }
         }

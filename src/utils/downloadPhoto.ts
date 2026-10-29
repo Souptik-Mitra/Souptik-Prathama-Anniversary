@@ -28,7 +28,7 @@ export function generateDownloadFilename(photo: PhotoEntry, index?: number): str
 
 /**
  * Downloads an individual photo to the user's device.
- * Handles server-side authorized downloads, base64 data URLs, and remote URLs.
+ * Handles local, base64 data URLs, and remote URLs.
  */
 export async function downloadPhoto(photo: PhotoEntry, index?: number): Promise<void> {
   const filename = generateDownloadFilename(photo, index);
@@ -47,24 +47,12 @@ export async function downloadPhoto(photo: PhotoEntry, index?: number): Promise<
 
     // Case 2: Local photo served by scrapbook (e.g. /photos/1.jpeg)
     if (photo.url.startsWith('/photos/')) {
-      const photoName = photo.url.replace('/photos/', '');
-      const downloadEndpoint = `/api/download/${encodeURIComponent(photoName)}?filename=${encodeURIComponent(filename)}`;
-
-      // Use fetch to check authorized response first
-      const res = await fetch(downloadEndpoint);
-      if (!res.ok) {
-        throw new Error(`Download failed with status ${res.status}`);
-      }
-
-      const blob = await res.blob();
-      const blobUrl = URL.createObjectURL(blob);
       const link = document.createElement('a');
-      link.href = blobUrl;
+      link.href = photo.url;
       link.download = filename;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      URL.revokeObjectURL(blobUrl);
       return;
     }
 
